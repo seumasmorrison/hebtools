@@ -5,7 +5,7 @@ years or months and load the raw files for each month into a time indexed
 pandas DataFrame saved in that specific month folder. The DataFrame contains
 columns for signal status, heave, north, west. 
 
-A numpy file 'prob_files.npy' is saved containing a simple 1d array, listing 
+A pandas Series is saved under the key 'problem_files', listing 
 files which have structure errors, meaning their data is unable to be 
 included in the DataFrame. 
 
