@@ -58,7 +58,6 @@ def check(extrema_df, sigma = 4):
         combined_factors = pd.concat(factors)
         combined_factors.name = 'max_std_factor'
         raw_plus_std = raw_plus_std.join(combined_factors)
-        raw_plus_std.to_pickle('raw_plus_std')
         return raw_plus_std
         
     displacements = detect_error_waves(extrema_df)
