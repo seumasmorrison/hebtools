@@ -35,7 +35,6 @@ def check(extrema_df, sigma = 4):
         std_deviations = grouped_displacements['heave','north','west'].std()
         raw_plus_std = displacements.join(std_deviations, on='file_name', 
                                           rsuffix='_file_std')                                
-        raw_plus_std.to_pickle('raw_plus_std')
         return raw_plus_std
         
     def compare_factors(main_factor, second_factor, third_factor):
