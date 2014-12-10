@@ -118,8 +118,8 @@ Requires:
   tested with 1.6.1 )
 - [PyTables](http://pytables.org) ( developed and tested with 3.0.0 )
 
-Almost all of the above requirements can be satisfied with a Python distribution
-like [Anaconda CE](http://continuum.io/downloads.html). 
+All of the above requirements can be satisfied with a Python distribution
+like [Anaconda](http://continuum.io/downloads.html). 
 
 openpyxl can be installed afterwards by running 'easy_install openpyxl' from the
 Anaconda scripts directory. 
