@@ -35,6 +35,7 @@ from hebtools.common.wave_stats import WaveStats
 from hebtools.common.extrema import GetExtrema
 import logging
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+buoy_data = pd.HDFStore('buoy_data.h5', complib='blosc', complevel=9)
 
 def iter_loadtxt(filename, skiprows=0, dtype=np.int):
     """ This function is adapted from Joe Kington's example on Stack Overflow
@@ -99,7 +100,6 @@ def load(folder_path, year = None, month = None):
             else:
                 files.append(raw_array) 
         displacements_df = pd.concat(files)
-        buoy_data = pd.HDFStore('buoy_data.h5', complib='blosc', complevel=9)
         buoy_data.put('displacements', displacements_df, append=False,
                       format='t')
         buoy_data.put('problem_files', pd.Series(problem_files_arr),
