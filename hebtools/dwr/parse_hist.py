@@ -75,5 +75,5 @@ def load(buoy_path):
     for file_type in file_types:
         historical_dfs.append(get_historical_dataframe(buoy_path, file_type))
     his_hiw_df = pd.concat(historical_dfs)
-    his_hiw_df.save(os.path.join(buoy_path,'his_hiw_df'))
+    his_hiw_df.to_pickle(os.path.join(buoy_path,'his_hiw_df'))
 
