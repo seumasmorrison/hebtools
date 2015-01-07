@@ -16,11 +16,12 @@ class WaveStats:
     
     def __init__(self, raw_disp, column_name = 'heave', error_check = True, 
                  series_name = 'wave_height_cm', 
-                 hdf5_file_name = 'buoy_data.h5'):    
+                 hdf5_file_name = 'buoy_data.h5', calc_std_factor = True):    
         self.raw_disp = raw_disp
-        self.calc_stats(column_name, error_check, series_name, hdf5_file_name)
-        if error_check:
-            self.get_zero_upcross_periods(column_name, hdf5_file_name)
+        self.calc_stats(column_name, error_check, series_name, hdf5_file_name,
+                        calc_std_factor)
+        #if error_check:
+            #self.get_zero_upcross_periods(column_name, hdf5_file_name)
     
     def get_zero_upcross_periods(self, column_name, hdf5_file_name):
         """ Based on code from https://gist.github.com/255291"""
@@ -67,7 +68,8 @@ class WaveStats:
         stats_df = pd.DataFrame(stats_dict, index=wave_height_df.index)
         return wave_height_df.join(stats_df)
     
-    def calc_stats(self, column_name, error_check, series_name, hdf5_file_name):
+    def calc_stats(self, column_name, error_check, series_name, hdf5_file_name,
+                   calc_std_factor):
         """ Wave heights are calculated from peak to trough and peak to peak
             period is also calculated.
         """        
@@ -97,7 +99,7 @@ class WaveStats:
         p_to_p_period_df[p_to_p_period_df>30]=np.nan
         wave_height_df = wave_height_df.join(p_to_p_period_df)
         # If the data is from a Datawell buoy add the original raw filename
-        if error_check:
+        if calc_std_factor:
             file_names = extrema.file_name[sub_zero_diff]
             file_name_df = pd.DataFrame(file_names, columns=['file_name'], 
                                     index = wave_height_timestamps)

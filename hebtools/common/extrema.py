@@ -169,8 +169,6 @@ class GetExtrema():
         # Join peak and troughs together into one single column DataFrame
         extrema_df = pd.concat([maxima_df, minima_df])
         extrema_df = extrema_df.sort()
-        extrema_df.to_hdf('buoy_data.h5','extrema', format='t', append=False,
-                          complib='blosc', complevel=9)
         # Join extrema to original displacements DataFrame
         raw_disp_with_extrema = self.raw_displacements.join(extrema_df)
         # Order the output DataFrame by time

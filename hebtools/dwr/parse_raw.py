@@ -35,7 +35,6 @@ from hebtools.common.wave_stats import WaveStats
 from hebtools.common.extrema import GetExtrema
 import logging
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-buoy_data = pd.HDFStore('buoy_data.h5', complib='blosc', complevel=9)
 
 def iter_loadtxt(filename, skiprows=0, dtype=np.int):
     """ This function is adapted from Joe Kington's example on Stack Overflow
@@ -58,7 +57,8 @@ def iter_loadtxt(filename, skiprows=0, dtype=np.int):
     data = data.reshape((-1, 4))
     return data
         
-def load(folder_path, year = None, month = None):
+def load(folder_path, year = None, month = None, load_as_new = True, 
+         hdf_file_name = 'buoy_data.h5', calc_wave_stats = True):
     
     def get_rounded_timestamps(file_name, raw_array_length):
         """ Takes the length of the raw file and based on the file name gives 
@@ -100,10 +100,8 @@ def load(folder_path, year = None, month = None):
             else:
                 files.append(raw_array) 
         displacements_df = pd.concat(files)
-        buoy_data.put('displacements', displacements_df, append=False,
-                      format='t')
-        buoy_data.put('problem_files', pd.Series(problem_files_arr),
-                      append=False, format='t')
+        displacements_df.to_hdf(hdf_file_name, 'displacements', 
+                                complib='blosc', complevel=9 )
         logging.info("finish iterate_over_files")
         return displacements_df
         
@@ -151,10 +149,21 @@ def load(folder_path, year = None, month = None):
                 process_month(path)
                 
     def process_month(month_path):
-        month_raw_displacements = iterate_over_file_names(month_path)
-        extrema_df = GetExtrema(month_raw_displacements)
-        raw_plus_std = error_check.check(extrema_df.raw_disp_with_extrema)
-        WaveStats(raw_plus_std)
+        if load_as_new:
+            print "load_as_new"
+            month_raw_displacements = iterate_over_file_names(month_path)
+            extrema_df = GetExtrema(month_raw_displacements)
+            raw_displacements_with_extrema = extrema_df.raw_disp_with_extrema
+            raw_plus_std = error_check.check(raw_displacements_with_extrema)
+            raw_plus_std.to_hdf(hdf_file_name, 'displacements', 
+                                complib='blosc', complevel=9 )
+        else:
+            print "use existing displacements"
+            os.chdir(month_path)
+            raw_plus_std = pd.read_hdf(hdf_file_name, 'displacements')
+        
+        if calc_wave_stats:
+            WaveStats(raw_plus_std)
 
     starting_path = os.path.abspath('.') 
     iterate_over_years(year, folder_path)
