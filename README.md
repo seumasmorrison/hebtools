@@ -18,12 +18,33 @@ In the case of a Datawell Waverider buoy the buoy data directory containing year
 subfolders must be passed to the load method of the **parse_raw** module which
 then iterates through the years. To call the module you can use the code below: 
 ```python
-from hebtools.dwr import parse_raw 
+In [1]: from hebtools.dwr import parse_raw 
 
-# Parse a specific month, only the first path parameter is required
+# Parse a specific month, only the first path parameter is required, there is 
+# some example waverider data in the hebtools/data folder
 
-parse_raw.load("path_to_buoy_folder", year=2005, month="July", 
-               hdf_file_name='buoy_data.h5', calc_wave_stats=True)
+In [2]: parse_raw.load("path_to_buoy_folder", year=2005, month="July", 
+                       hdf_file_name='buoy_data.h5', calc_wave_stats=True)
+
+# The previous command will create a blosc compressed hdf5 file in the same
+# directory as the raw files for that month, this can be loaded with the 
+# following command:
+
+In [3]: import pandas as pd
+
+# It is possible to inspect the hdf5 file to see the structure of the enclosed data.
+
+In [4]: pd.HDFStore('path_to_buoy_folder/2005/July/buoy_data.h5')
+Out[4]: 
+<class 'pandas.io.pytables.HDFStore'>
+File path: path_to_buoy_folder/2005/July/buoy_data.h5
+/displacements            frame        (shape->[110557,11])                                     
+/wave_height              frame_table  (typ->appendable,nrows->10599,ncols->4,indexers->[index])
+
+# The syntax below can be used to extract a specific frame as a DataFrame into pandas
+
+In[5]: displacements_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5',
+                                      'displacements')
 ```
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
