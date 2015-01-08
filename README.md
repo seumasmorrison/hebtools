@@ -43,8 +43,26 @@ File path: path_to_buoy_folder/2005/July/buoy_data.h5
 
 # The syntax below can be used to extract a specific frame as a DataFrame into pandas
 
-In[5]: displacements_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5',
+In [5]: displacements_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5',
                                       'displacements')
+
+# To see the structure of the DataFrame you can print the file line with the following command:
+
+In [6]: displacements_df.head(1)
+Out[6]:     sig_qual  heave  north  west                   file_name  extrema \ 
+2005-07-01         0    -67    -37  -108  buoy}2005-07-01T00h00Z.raw      NaN   
+           signal_error  heave_file_std  north_file_std  west_file_std \
+2005-07-01        False       81.295838        52.67221      81.435775   
+            max_std_factor  
+2005-07-01        1.326198  
+
+# To understand what time period the DataFrame covers we can examine the index 
+
+In [7]: displacements_df.index
+Out[7]:
+<class 'pandas.tseries.index.DatetimeIndex'>
+[2005-07-01 00:00:00, ..., 2005-07-01 23:59:59.200000]
+Length: 110557, Freq: None, Timezone: None
 ```
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
