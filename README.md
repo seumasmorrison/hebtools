@@ -16,7 +16,10 @@ subpackages **awac**, **common**, **dwr** and **test**
 
 In the case of a Datawell Waverider buoy the buoy data directory containing year
 subfolders must be passed to the load method of the **parse_raw** module which
-then iterates through the years. To call the module you can use the code below: 
+then iterates through the years. Below is some example code ( from an IPython 
+terminal session with comments interspersed ) for parsing the example data, then
+interrogating the files produced from the process: 
+
 ```python
 In [1]: from hebtools.dwr import parse_raw 
 
@@ -46,7 +49,7 @@ File path: path_to_buoy_folder/2005/July/buoy_data.h5
 In [5]: displacements_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5',
                                       'displacements')
 
-# To see the structure of the DataFrame you can print the file line with the following command:
+# To see the structure of the DataFrame you can print the first row with the following command:
 
 In [6]: displacements_df.head(1)
 Out[6]:     sig_qual  heave  north  west                   file_name  extrema \ 
@@ -63,7 +66,16 @@ Out[7]:
 <class 'pandas.tseries.index.DatetimeIndex'>
 [2005-07-01 00:00:00, ..., 2005-07-01 23:59:59.200000]
 Length: 110557, Freq: None, Timezone: None
+
+# To query specific columns in the DataFrame you can pass a list of column names
+# via the [] syntax and additionally plot these columns as shown below.
+
+In [8]: displacements_df[['heave','sig_qual']].plot(secondary_y=('sig_qual'))
+Out[8]: <matplotlib.axes._subplots.AxesSubplot at 0x1ff62470>
+
+# Plot will appear in separate window from IPython terminal ( see example below ). 
 ```
+![outputs/heave_vs_sig_qual.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_vs_sig_qual.png)
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
