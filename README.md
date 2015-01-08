@@ -17,16 +17,14 @@ subpackages **awac**, **common**, **dwr** and **test**
 In the case of a Datawell Waverider buoy the buoy data directory containing year
 subfolders must be passed to the load method of the **parse_raw** module which
 then iterates through the years. To call the module you can use the code below: 
+```python
+from hebtools.dwr import parse_raw 
 
-    from hebtools.dwr import parse_raw 
-    parse_raw.load("path_to_buoy_folder")
-    
-    # Parse a specific year 
-    parse_raw.load("path_to_buoy_folder","2005")
-    
-    # Parse a specific month
-    parse_raw.load("path_to_buoy_folder","2005","July")
+# Parse a specific month, only the first path parameter is required
 
+parse_raw.load("path_to_buoy_folder", year=2005, month="July", 
+               hdf_file_name='buoy_data.h5', calc_wave_stats=True)
+```
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
