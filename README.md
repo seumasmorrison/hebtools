@@ -27,10 +27,14 @@ then iterates through the years. To call the module you can use the code below:
     # Parse a specific month
     parse_raw.load("path_to_buoy_folder","2005","July")
 
-The module then processes the records from the raw files into a pandas DataFrame
-a good format for doing time series analysis. The main output file is called
-*raw_plus_std* and a smaller *wave_height_dataframe* dataframe is also produced 
-providing details on individual waves extracted from the displacements. 
+The module then processes the records from the raw files into a pandas 
+DataFrame a good format for doing time series analysis. The main output is a 
+DataFrame called *displacements* which includes the data from the raw files and
+ extra columns which have been derived from the raw files, a smaller optional 
+*wave_heights* dataframe is also produced providing details on individual waves
+ extracted from the displacements. These dataframes are saved to an hdf5 file 
+ called *buoy_data.h5* in the month folder using PyTables and the Blosc 
+ compression library.
 
 Interrogating these output files in the DataFrame format requires a little 
 knowledge of the pandas [data structures and 
