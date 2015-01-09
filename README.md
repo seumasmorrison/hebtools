@@ -83,7 +83,9 @@ In [9]: from datetime import datetime
 
 In [10]: displacements_subset = displacements_df.ix[datetime(2005,7,1,16):datetime(2005,7,1,16,30)]
 
-In [11]: displacements_subset.heave.plot(title='Heave data in centimetres')
+In [11]: displacements_subset.heave.plot(title='Heave data in centimetres', legend='heave')
+Out[11]: <matplotlib.axes._subplots.AxesSubplot at 0x141e24e0>
+
 ```
 ![outputs/heave_subset_titled.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_subset_titled.png)
 The module then processes the records from the raw files into a pandas 
