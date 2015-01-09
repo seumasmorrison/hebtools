@@ -107,6 +107,71 @@ max        716.000000     19.600000        6.178612
 
 ```
 
+To find out the particular record with a specific value we can pass a 
+comparison into the ix function. The example below is to locate the 
+timestamp for the maximum wave height. Measured from peak to trough.
+
+```python
+In [13]: wave_heights_df.ix[wave_heights_df.wave_height.cm==wave_heights_df.wave_height_cm.max()]
+Out[13]:                             
+                            wave_height_cm  period \ 
+2005-07-01 07:25:11.700000             716     8.6   
+
+                                             file_name  max_std_factor  
+2005-07-01 07:25:11.700000  buoy}2005-07-01T07h00Z.raw        4.390276 
+```
+
+To exclude certain results from the returned DataFrame we can again use the ix
+function and pass a less than or more than operator. The example below uses the
+max_std_factor column which is calculated by a comparison between the 
+displacments for that record and the standard deviation for that 30 minute file.
+
+```python
+In [14]: filtered_wave_heights = wave_height_df.ix[wave_height_df.max_std_factor<4]
+Out[14]: filtered_wave_heights.describe()
+       wave_height_cm       period  max_std_factor
+count    10576.000000  10576.00000    10576.000000
+mean       210.980333      8.15017        2.020694
+std         91.780120      2.62615        0.566491
+min          6.000000      3.10000        0.400580
+25%        142.000000      6.20000        1.608198
+50%        205.000000      7.80000        1.977909
+75%        271.000000     10.10000        2.377813
+max        572.000000     19.60000        3.998282
+```
+
+We can see that the overall number of records has reduced in this filtered 
+DataFrame and the maximum wave height is now 572cm down from 716cm. We can also 
+make comparisons between the two DataFrames, the example below shows the number
+of records filtered and how to return those records which have been filtered.
+
+```python
+In [15]: len(wave_heights_df) - len(filtered_wave_heights)
+Out[15]: 23
+
+In [16]: filtered_wave_heights = wave_heights_df.ix[wave_heights_df.index.diff(filtered_wave_heights.index)]
+
+```
+
+We can also customise the plots, attaching labels to the axes by making use of
+the matplotlib package pyplot, as shown below plotting the wave heights of the
+filtered records as points, to see distribution over time and height:
+
+```python
+In [17]: import matplotlib.pyplot as plt
+
+In [18]: plt.figure()
+Out[18]: <matplotlib.figure.Figure at 0x22995128>
+
+In [19]: filtered_wave_heights.wave_height_cm.plot(style='.', markersize=10, title='Filtered Wave Records')
+Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x22fe7780>
+
+In [20]: plt.ylabel('Wave Heights in Centimetres')
+Out[20]: <matplotlib.text.Text at 0x22ff0c50>
+
+```
+![outputs/filtered_wave_records.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/filtered_wave_records.png)
+
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
