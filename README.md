@@ -16,23 +16,25 @@ subpackages **awac**, **common**, **dwr** and **test**
 
 In the case of a Datawell Waverider buoy the buoy data directory containing year
 subfolders must be passed to the load method of the **parse_raw** module which
-then iterates through the years. To call the module you can use the code below: 
+then iterates through the years. Below is some example code ( from an IPython 
+terminal session with comments interspersed ) for parsing the example data, then
+interrogating the files produced from the process: 
+
+Below is come code to parse a specific month, only the first path parameter 
+is required, there is some example waverider data in the hebtools/data folder
+
 ```python
 In [1]: from hebtools.dwr import parse_raw 
 
-# Parse a specific month, only the first path parameter is required, there is 
-# some example waverider data in the hebtools/data folder
-
 In [2]: parse_raw.load("path_to_buoy_folder", year=2005, month="July", 
                        hdf_file_name='buoy_data.h5', calc_wave_stats=True)
+```
+The previous command will create a blosc compressed hdf5 file in the same
+directory as the raw files for that month, this can be inspected with the 
+following command:
 
-# The previous command will create a blosc compressed hdf5 file in the same
-# directory as the raw files for that month, this can be loaded with the 
-# following command:
-
+```python
 In [3]: import pandas as pd
-
-# It is possible to inspect the hdf5 file to see the structure of the enclosed data.
 
 In [4]: pd.HDFStore('path_to_buoy_folder/2005/July/buoy_data.h5')
 Out[4]: 
@@ -40,13 +42,13 @@ Out[4]:
 File path: path_to_buoy_folder/2005/July/buoy_data.h5
 /displacements            frame        (shape->[110557,11])                                     
 /wave_height              frame_table  (typ->appendable,nrows->10599,ncols->4,indexers->[index])
+```
 
-# The syntax below can be used to extract a specific frame as a DataFrame into pandas
-
+The syntax below can be used to extract a specific frame as a DataFrame into pandas
+and read the first line of the dataframe.
+```python
 In [5]: displacements_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5',
                                       'displacements')
-
-# To see the structure of the DataFrame you can print the file line with the following command:
 
 In [6]: displacements_df.head(1)
 Out[6]:     sig_qual  heave  north  west                   file_name  extrema \ 
@@ -55,15 +57,35 @@ Out[6]:     sig_qual  heave  north  west                   file_name  extrema \
 2005-07-01        False       81.295838        52.67221      81.435775   
             max_std_factor  
 2005-07-01        1.326198  
-
-# To understand what time period the DataFrame covers we can examine the index 
-
+```
+To understand what time period the DataFrame covers we can examine the index 
+```python
 In [7]: displacements_df.index
 Out[7]:
 <class 'pandas.tseries.index.DatetimeIndex'>
 [2005-07-01 00:00:00, ..., 2005-07-01 23:59:59.200000]
 Length: 110557, Freq: None, Timezone: None
 ```
+To query specific columns in the DataFrame you can pass a list of column names
+via the [] syntax and additionally plot these columns as shown below.
+```python
+In [8]: displacements_df[['heave','sig_qual']].plot(secondary_y=('sig_qual'))
+Out[8]: <matplotlib.axes._subplots.AxesSubplot at 0x1ff62470>
+```
+Plot will appear in separate window from IPython terminal ( see example below ). 
+![outputs/heave_vs_sig_qual.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_vs_sig_qual.png)
+
+It is possible to select a subset of a DatetimeIndexed DataFrame using the python 
+datetime module as shown below.
+
+```python
+In [9]: from datetime import datetime
+
+In [10]: displacements_subset = displacements_df.ix[datetime(2005,7,1,16):datetime(2005,7,1,16,30)]
+
+In [11]: displacements_subset.heave.plot(title='Heave data in centimetres')
+```
+![outputs/heave_subset_titled.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_subset_titled.png)
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
