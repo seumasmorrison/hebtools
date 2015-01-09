@@ -88,6 +88,25 @@ Out[11]: <matplotlib.axes._subplots.AxesSubplot at 0x141e24e0>
 
 ```
 ![outputs/heave_subset_titled.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_subset_titled.png)
+
+To get an overall idea of the data in the DataFrame you can use the describe 
+function to return the maximum, minimum, mean and other parameters shown below. 
+
+```python
+In [12]: wave_heights_df = pd.read_hdf('path_to_buoy_folder/2005/July/buoy_data.h5','wave_height')
+Out[12]: wave_heights_df.describe()
+       wave_height_cm        period  max_std_factor
+count    10599.000000  10599.000000    10599.000000
+mean       211.435230      8.150750        2.025937
+std         92.510379      2.625793        0.577351
+min          6.000000      3.100000        0.400580
+25%        142.000000      6.200000        1.608665
+50%        205.000000      7.800000        1.978814
+75%        271.000000     10.100000        2.380375
+max        716.000000     19.600000        6.178612
+
+```
+
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
