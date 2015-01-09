@@ -75,6 +75,17 @@ Out[8]: <matplotlib.axes._subplots.AxesSubplot at 0x1ff62470>
 Plot will appear in separate window from IPython terminal ( see example below ). 
 ![outputs/heave_vs_sig_qual.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_vs_sig_qual.png)
 
+It is possible to select a subset of a DatetimeIndexed DataFrame using the python 
+datetime module as shown below.
+
+```python
+In [9]: from datetime import datetime
+
+In [10]: displacements_subset = displacements_df.ix[datetime(2005,7,1,16):datetime(2005,7,1,16,30)]
+
+In [11]: displacements_subset.heave.plot(title='Heave data in centimetres')
+```
+![outputs/heave_subset_titled.png](https://raw.githubusercontent.com/seumasmorrison/hebtools/master/outputs/heave_subset_titled.png)
 The module then processes the records from the raw files into a pandas 
 DataFrame a good format for doing time series analysis. The main output is a 
 DataFrame called *displacements* which includes the data from the raw files and
