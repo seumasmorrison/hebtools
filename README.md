@@ -252,7 +252,7 @@ considered to be statistically unrealistic for linear wave theory.
 The project was developed with data received from Waverider MKII and MKIII buoys
 with RFBuoy v2.1.27 producing the raw files. The AWAC was a 1MHz device and
 Storm v1.14 produced the wad files. The code was developed with the assistance
-of the [Hebridean Marine Energy Futures](http://hebmarine.com) project. 
+of the [Hebridean Marine Energy Futures](http://hebmarine.com) and [MERIKA](http://www.uhi.ac.uk/en/merika) projects. 
 
 Some more information on the data acquisition and overall workflow can be [found
 on this poster](http://www.academia.edu/3231377/hebtools_Time_series_analysis_tools_for_wave_sensor_data)
