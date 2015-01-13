@@ -268,10 +268,8 @@ Requires:
 - [PyTables](http://pytables.org) ( developed and tested with 3.0.0 )
 
 All of the above requirements can be satisfied with a Python distribution
-like [Anaconda](http://continuum.io/downloads.html). 
-
-openpyxl can be installed afterwards by running 'easy_install openpyxl' from the
-Anaconda scripts directory. 
+like [Anaconda](http://continuum.io/downloads.html), those that aren't 
+installed by default can be installed via 'conda install package_name'.
 
 Recommended optional dependencies for speed are
 [numexpr](https://code.google.com/p/numexpr/) and
